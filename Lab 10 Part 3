@@ -1,0 +1,28 @@
+Postgresql database for SCRUM project
+
+Our database should use one main table that holds the main list of all students,
+with backup tables for listing the students that use a particular skill
+
+example of the main table includes the following fields:
+	Student_ID integer UNIQUE,
+	First_Name char(20),
+	Last_Name char(20),
+	Standing char(20),
+	Department char(40),
+	Phone char(40),
+	Email char(40)
+
+example of a skill table, named after the skill, includes the following fields:
+	Student_ID integer UNIQUE,
+	Rate(1-5)
+
+Students can then be found using the INNER JOIN command to list contact information for students with a specific skill and/or rating
+
+Examples of skill tables:
+	Soccer
+	Football
+	(other sports)
+	Programming
+	Driving
+	Writing
+	Finance

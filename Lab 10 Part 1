@@ -1,0 +1,78 @@
+postgres=# create database teammembers;
+CREATE DATABASE
+postgres=# create user student with password 'student';
+CREATE ROLE
+postgres=# grant all privileges on database teammembers to student;
+GRANT
+postgres=# create table members (ID integer, First_Name char(20), Last_Name char(20), Job_Title char(40));
+CREATE TABLE
+postgres=# insert into members values(1, 'John','Doe','Analyst');
+INSERT 0 1
+postgres=# insert into members values(2, 'Bob','Li','Programmer');
+INSERT 0 1
+postgres=# insert into members values(3, 'Al','Caputo','Manager');
+INSERT 0 1
+postgres=# insert into members values(4, 'Alex','Searcy','Consultant');
+INSERT 0 1
+postgres=# select * from members
+postgres-# select * from members;
+ERROR:  syntax error at or near "select"
+LINE 2: select * from members;
+        ^
+postgres=# SELECT * FROM members;
+postgres=# 
+
+
+
+Heroku database access and table join
+
+nick@nick-VirtualBox:~/Documents$ heroku pg:psql heroku-postgres-8c2ea4a2::mauve---> Connecting to HEROKU_POSTGRESQL_MAUVE_URL
+psql (9.4.5)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
+Type "help" for help.
+
+heroku-postgres-8c2ea4a2::MAUVE=> create table members(ID integer, First_Name char(20), Last_Name char(20), Job_Title char(40));
+CREATE TABLE
+heroku-postgres-8c2ea4a2::MAUVE=> insert into members values(1, 'John','Doe','Analyst');
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> insert into members values(2, 'Bob','Li','Programmer');
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> insert into members values(3, 'Al','Caputo','Manager');
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> insert into members values(4, 'Alex','Searcy','Consultant');
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> SELECT * FROM members;
+ id |      first_name      |      last_name       |                job_title                 
+----+----------------------+----------------------+------------------------------------------
+  1 | John                 | Doe                  | Analyst                                 
+  2 | Bob                  | Li                   | Programmer                              
+  3 | Al                   | Caputo               | Manager                                 
+  4 | Alex                 | Searcy               | Consultant                              
+(4 rows)
+
+heroku-postgres-8c2ea4a2::MAUVE=> create table pay(ID integer, First_Name char(20), Last_Name char(20), Pay integer);
+CREATE TABLE
+heroku-postgres-8c2ea4a2::MAUVE=> insert into pay values(1, 'Stacy','Non',40000);
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> insert into pay values(2, 'John','Doe',60000);
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> insert into pay values(3, 'Alex','Searcy',70000);
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> insert into pay values(4, 'Jason','Kubit',50000);
+INSERT 0 1
+heroku-postgres-8c2ea4a2::MAUVE=> select Job_Title, Last_Name, Pay from members inner join pay onmembers.Last_Name = pay.Last_Name;
+ERROR:  syntax error at or near "."
+LINE 1: ...st_Name, Pay from members inner join pay onmembers.Last_Name...
+                                                             ^
+heroku-postgres-8c2ea4a2::MAUVE=> select Job_Title, Last_Name, Pay from members inner join pay on members.Last_Name = pay.Last_Name;
+ERROR:  column reference "last_name" is ambiguous
+LINE 1: select Job_Title, Last_Name, Pay from members inner join pay...
+                          ^
+heroku-postgres-8c2ea4a2::MAUVE=> select members.Job_Title, members.Last_Name, pay.Pay from members inner join pay on members.Last_Name = pay.Last_Name;
+                job_title                 |      last_name       |  pay  
+------------------------------------------+----------------------+-------
+ Analyst                                  | Doe                  | 60000
+ Consultant                               | Searcy               | 70000
+(2 rows)
+
+heroku-postgres-8c2ea4a2::MAUVE=> 
