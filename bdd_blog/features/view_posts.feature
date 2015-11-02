@@ -3,6 +3,6 @@ Feature: Show blog list
 	I can see list of posted blogs
 Scenario: Show blog list
 	#Given there are already 4 posts
-	Given 4 posts exist
+	Given 4 posts exist 
 	And I am on the blog homepage
 Then I can see list of 4 posted blogs
